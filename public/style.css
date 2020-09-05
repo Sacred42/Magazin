@@ -1,0 +1,22 @@
+.sign {
+    display: flex;
+    float: right;
+}
+
+.sign_item {
+    padding-right: 15px;
+}
+
+.main_head {
+   
+    background-color: aqua;
+    height: 55px;
+}
+
+.thumbnail img {
+    max-height: 150px;
+}
+
+.bench{
+    color: blue;
+}
