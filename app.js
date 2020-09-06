@@ -17,25 +17,26 @@ mongoose.connect('mongodb://localhost:27017/?readPreference=primary&appname=Mong
 require('./config/passport');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(valid()); // ставить сразу после body-parser!!
 app.use(cookieParser());
 // app.use(express.json()); 
 // app.use(express.urlencoded({extended : false})); 
-// app.use(session({
-//     secret: 'random',
-//     store : new Mongostore({ mongooseConnection: mongoose.connection }),
-//     cookie : {
-//         maxAge : 30 * 1000
-//     }
-// }));
+app.use(session({
+    secret: 'random',
+    store : new Mongostore({ mongooseConnection: mongoose.connection }),
+    cookie : {
+        maxAge : 30 * 1000
+    }
+}));
 
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
-// app.use(valid());
 app.engine('hbs', Ehbs({defaultLayout : 'main', extname : '.hbs'}));
 app.set('view engine' ,'.hbs');
 app.use(rout);
 app.use(express.static(path.join(__dirname, 'public')));
+
 
 app.use(function(req, res, next) {
     var err = new Error('Not Found');
