@@ -1,6 +1,7 @@
 const express = require('express');
 const Ehbs = require('express-handlebars');
 const rout = require('./routes/routes');
+const routUser = require('./routes/user');
 const path = require('path');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -24,6 +25,8 @@ app.use(cookieParser());
 app.use(session({
     secret: 'random',
     store : new Mongostore({ mongooseConnection: mongoose.connection }),
+    resave: false, 
+    saveUninitialized: false,
     cookie : {
         maxAge : 30 * 1000
     }
@@ -34,12 +37,18 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.engine('hbs', Ehbs({defaultLayout : 'main', extname : '.hbs'}));
 app.set('view engine' ,'.hbs');
-app.use(rout);
+app.use(function(req, res , next){
+    res.locals.login = req.isAuthenticated();
+    res.locals.session = req.session;
+    next();
+})
+app.use(routUser);
+app.use('/' , rout);
 app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.use(function(req, res, next) {
-    var err = new Error('Not Found');
+    var err = new Error('error');
     err.status = 404;
     next(err);
   });

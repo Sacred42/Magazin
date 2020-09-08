@@ -1,7 +1,9 @@
 const express =  require('express');
 const product = require('../models/products');
-const passport = require('passport');
+const Cart = require('../models/cart');
 const { Router } = require('express');
+const cart = require('../models/cart');
+const products = require('../models/products');
 
 const routes = express.Router();
 
@@ -10,30 +12,30 @@ const productsi = await product.find({}).lean();
 res.render('shop', { productsi : productsi} );
 });
 
-routes.get('/signup', (req, res, next)=>{
-     var messages = req.flash('error') || [];
-    res.render('signup',  {messages: messages, hasErrors: messages.length > 0});
-});
-routes.post('/signup' , passport.authenticate('local.signup', {
-    successRedirect : '/profile',
-    failureRedirect : '/signup',
-    failureFlash : true
-}));
+routes.get('/add-to-cart/:id' , (req, res, next)=>{
+ var productId = req.params.id;
+ var cart = new Cart(req.session.cart ? req.session.cart : {});
 
-routes.get('/profile', (req, res , next)=>{
-    res.render('profile');
-});
+ product.findById(productId , function(err , item){
+    if (err){
+        return res.redirect('/');
+      }
+     cart.add(item , item.id);
+     req.session.cart = cart;
+     console.log(req.session.cart);
+     res.redirect('/');
+ })
 
-routes.get('/signin' , (req, res)=>{
-    var messages = req.flash('error');
-    res.render('signin' , {messages : messages , hasErrors : messages.length > 0 });
-});
+} );
 
-routes.post('/signin' , passport.authenticate('local.signin', {
-    successRedirect : '/profile',
-    failureRedirect : '/signin',
-    failureFlash : true
-}));
+routes.get('/shopping-cart', (req ,res , next)=>{
+  if(!req.session.cart){
+   return res.render('shopping-cart', {products : null});
+  }
+  var cart = new Cart(req.session.cart);
+   res.render('shopping-cart', {products : cart.arrGenerate(), totalPrice : cart.totalPrice});
+   console.log(cart.arrGenerate());
+})
 
 
 module.exports = routes;
