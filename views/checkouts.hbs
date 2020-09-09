@@ -1,0 +1,28 @@
+<h2>CheckOuts</h2>
+<div>{{TotalPrice}}</div>
+<div id="error" class="alert alert-danger {{#if noErrormsg}}hidden{{/if}}" >{{errorMsg}}</div>
+
+
+<form action="/checkouts" method="POST" id="forma">
+<div>
+    <label>Name<label>
+    <input type="name" id="name" required>
+    <label>Adress<label>
+    <input type="adress" id="adress" required>
+     <label>Card holder<label>
+    <input type="cardholder" id="cardholder" required>
+    <label>Credit Number</label>
+    <input type="creditnum" id="creditnum" required>
+    <label>Expiration Month</label>
+    <input type="expirationm" id="expirationm" required>
+    <label>Expiration Years</label >
+    <input type="expirationy" id="expirationy" required >
+     <label>CVC</label>
+    <input type="cvc" id="cvc" required>
+    <button type="submit">Bay now</button>
+</div>   
+
+</form>
+
+<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+<script src="javascript/checkouts.js"></script>
