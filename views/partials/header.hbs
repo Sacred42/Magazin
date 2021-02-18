@@ -1,15 +1,17 @@
 <nav>
     <div class="main_head row">
-        <div class="col-lg-4 text-center"><a href="/shopping-cart">Shopping Cart
+        <div class="col-lg-4 text-center"><a href="/">Main</a></div>
+        <div class="col-lg-5 text-center"><a href="/shopping-cart">Shopping Cart
         <span class="badge">{{session.cart.totalQty}}</span>
-        </a></div>
+        </a>
+        </div>
         <div class="sign col-lg-3 ">
             {{# if login}}
-            <div class="sign_item">User account</div>
-            <div class="sign_item">Logout</div>
+            <div class="sign_item"><a href="/user-profile">User account</a></div>
+            <div class="sign_item"><a href="/logout">Logout</a></div>
             {{ else }}
-            <div class="sign_item">Sign in</div>
-            <div class="sign_item">Sign up</div>
+            <div class="sign_item"><a href="signin">Sign in</a></div>
+            <div class="sign_item"><a href="signup">Sign up</a></div>
             {{/if}}
 
         </div>

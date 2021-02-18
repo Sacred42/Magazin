@@ -4,8 +4,15 @@ const passport = require('passport');
 const routes = express.Router();
 
 routes.get('/profile', isLogin, (req, res , next)=>{
-    res.render('profile');
+    const messages =  req.flash('success')[0];
+    req.session.authEmail = messages;
+    res.render('profile' , {messages } );
 });
+
+routes.get('/user-profile', isLogin, (req, res, next)=>{
+    const email = req.session.authEmail;
+    res.render('user-profile' , {email} )
+})
 
 // routes.use('/', notLogin, function(req, res, next){
 //     next();
@@ -33,7 +40,13 @@ routes.post('/signin' , passport.authenticate('local.signin', {
 }));
 
 routes.get('/logout',  function(req, res, next){
-    req.logout();
+    cookie = req.cookies;
+    for (var prop in cookie) { // поиск свойства (куки)
+        if(!prop) {
+        return;   
+    }   
+        res.cookie(prop, '', {expires: new Date(0)}); // установление найденого куки на 0 - удаление
+    }
     res.redirect('/');
 })
 

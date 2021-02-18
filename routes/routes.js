@@ -23,7 +23,6 @@ routes.get('/add-to-cart/:id' , (req, res, next)=>{
       }
      cart.add(item , item.id);
      req.session.cart = cart;
-     console.log(req.session.cart);
      res.redirect('/');
  })
 
@@ -38,7 +37,7 @@ routes.get('/shopping-cart', (req ,res , next)=>{
   
 });
 
-routes.get('/checkouts' , function(req, res, next){
+routes.get('/checkout' , function(req, res, next){
   if(!req.session.cart){
     return res.redirect('/shopping-cart');
   }
@@ -47,7 +46,7 @@ routes.get('/checkouts' , function(req, res, next){
   res.render('checkouts' , {TotalPrice : cart.totalPrice, errorMsg : errorMsg , noErrormsg : !errorMsg});
 });
 
-routes.post('/checkouts' ,(req, res, next)=>{
+routes.post('/checkout' ,(req, res, next)=>{
    if(!req.session.cart){
      return res.render('shopping-cart');
    }
